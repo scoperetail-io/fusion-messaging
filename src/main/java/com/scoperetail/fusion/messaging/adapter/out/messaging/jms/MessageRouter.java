@@ -1,6 +1,8 @@
 package com.scoperetail.fusion.messaging.adapter.out.messaging.jms;
 
-public interface MessageSender {
+import org.springframework.jms.core.JmsTemplate;
+
+public interface MessageRouter {
 
 	boolean send(String brokerId, String queue, String payload);
 
@@ -9,5 +11,7 @@ public interface MessageSender {
 		send(brokerId, "AUDTI.IN", payload);
 		return true;
 	}
+
+	void registerTemplate(String brokerId, JmsTemplate jmsTemplate);
 
 }
