@@ -33,5 +33,7 @@ public class MessageRouterReceiverService implements MessageRouterReceiver {
 		// start calls initialize
 		dmlc.afterPropertiesSet();
 		dmlc.start();
+		System.out.println("registerListener brokerId:" + brokerId + "queueName: " + queueName);
+
 	}
 }

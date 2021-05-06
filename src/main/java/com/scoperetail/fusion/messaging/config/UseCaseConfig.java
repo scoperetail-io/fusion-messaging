@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class UseCase {
+public class UseCaseConfig {
 	private String name;
 	private String version;
 	private String activeConfig;

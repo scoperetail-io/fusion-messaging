@@ -14,5 +14,5 @@ import lombok.Data;
 public class FusionConfig {
 	private List<Broker> brokers = new ArrayList<>();
 	private List<RetryPolicy> retryPolicies = new ArrayList<>();;
-	private List<UseCase> usecases = new ArrayList<>();;
+	private List<UseCaseConfig> usecases = new ArrayList<>();;
 }

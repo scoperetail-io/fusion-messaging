@@ -13,4 +13,9 @@ public class Broker {
 	private String queueManagerName;
 	private Integer sendSessionCacheSize;
 	private String userName;
+	private Owner owner;
+
+	public enum Owner {
+		SCOPE, MCS, GIF
+	}
 }
