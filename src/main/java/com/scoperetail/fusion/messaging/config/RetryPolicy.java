@@ -4,8 +4,12 @@ import lombok.Data;
 
 @Data
 public class RetryPolicy {
-	private String policyType;
+	private PolicyType policyType;
 	private Short maxAttempt;
 	private Integer backoffMS;
 	private String type;
+
+	enum PolicyType {
+		REALTIME, OFFLINE,
+	}
 }
