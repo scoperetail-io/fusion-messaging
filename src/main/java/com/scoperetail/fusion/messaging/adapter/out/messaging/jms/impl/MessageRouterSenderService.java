@@ -1,3 +1,4 @@
+/* ScopeRetail (C)2021 */
 package com.scoperetail.fusion.messaging.adapter.out.messaging.jms.impl;
 
 import java.util.HashMap;
@@ -14,21 +15,16 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MessageRouterSenderService implements MessageRouterSender {
 
-	//private ApplicationContext applicationContext;
-	private Map<String, JmsTemplate> jmsTemplateByBrokerIdMap = new HashMap<>(1);
-
-	//private Map<String, MessageListener<String>> listenersByQueueMap = new HashMap<>(1);
+	private final Map<String, JmsTemplate> jmsTemplateByBrokerIdMap = new HashMap<>(1);
 
 	@Override
-	public boolean send(String brokerId, String queue, String payload) {
-		JmsTemplate jmsTemplate = jmsTemplateByBrokerIdMap.get(brokerId);
+	public void send(final String brokerId, final String queue, final String payload) {
+		final JmsTemplate jmsTemplate = jmsTemplateByBrokerIdMap.get(brokerId);
 		jmsTemplate.convertAndSend(queue, payload);
-		return true;
 	}
 
 	@Override
-	public void registerTemplate(String brokerId, JmsTemplate jmsTemplate) {
+	public void registerTemplate(final String brokerId, final JmsTemplate jmsTemplate) {
 		jmsTemplateByBrokerIdMap.put(brokerId, jmsTemplate);
 	}
-
 }
