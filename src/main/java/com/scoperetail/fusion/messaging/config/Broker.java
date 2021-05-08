@@ -16,7 +16,7 @@ public class Broker {
   private Owner owner;
 
   public enum Owner {
-    SCOPE,
+    FUSION,
     MCS,
     GIF
   }

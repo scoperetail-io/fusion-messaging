@@ -1,6 +1,8 @@
 /* ScopeRetail (C)2021 */
 package com.scoperetail.fusion.messaging.adapter.in.messaging.jms;
 
+import static com.scoperetail.fusion.messaging.adapter.in.messaging.jms.TaskResult.DISCARD;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
@@ -24,6 +26,14 @@ public class MessageReceiver implements SessionAwareMessageListener<Message> {
 		log.info("Message received on queue: {} for brokerId: {}", queue, brokerId);
 		final SimpleMessageConverter smc = new SimpleMessageConverter();
 		final String strMessage = String.valueOf(smc.fromMessage(message));
-		messageListener.doTask(strMessage);
+		TaskResult taskResult = DISCARD;
+		try {
+			taskResult = messageListener.doTask(strMessage);
+		} catch (final Throwable e) {
+			log.error("=================ERROR MESSAGE DUMP START=========================");
+			log.error("Unable to handle message: {} due to exception:{}", message, e);
+			log.error("=================ERROR MESSAGE DUMP END=========================");
+		}
+		log.info("Message handling status is: {}", taskResult);
 	}
 }
