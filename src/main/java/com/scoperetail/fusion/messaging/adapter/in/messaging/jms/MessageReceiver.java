@@ -5,6 +5,7 @@ import static com.scoperetail.fusion.messaging.adapter.in.messaging.jms.TaskResu
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -30,29 +31,37 @@ public class MessageReceiver implements SessionAwareMessageListener<Message> {
 
 	@Override
 	public void onMessage(final Message message, final Session session) throws JMSException {
-		log.info("Message received on queue: {} for brokerId: {}", queue, brokerId);
+		final UUID corelationId = UUID.randomUUID();
 		final SimpleMessageConverter smc = new SimpleMessageConverter();
 		final String strMessage = String.valueOf(smc.fromMessage(message));
-		TaskResult taskResult = DISCARD;
+		log.info("Message received CorelationId: {} Queue: {} for BrokerId: {} Message: {}", corelationId, queue,
+				brokerId, strMessage);
 		int noOfListenersHandledMessage = 0;
 		for (final MessageListener<String> messageListener : messageListeners) {
+			TaskResult taskResult = DISCARD;
 			try {
 				if (messageListener.canHandle(strMessage)) {
 					noOfListenersHandledMessage++;
 					taskResult = messageListener.doTask(strMessage);
-					log.info("Message handling status is: {}", taskResult);
+					log.info("Message handling status for corelationId: {} is: {}", corelationId, taskResult);
 				}
 			} catch (final Throwable e) {
-				log.error("=================ERROR MESSAGE DUMP START=========================");
-				log.error("Unable to handle error message: {} due to exception:{}", message, e);
-				log.error("=================ERROR MESSAGE DUMP END=========================");
+				log.info("Message handling status for corelationId: {} is: {}", corelationId, taskResult);
+				log.error("=================ERROR MESSAGE DUMP START(corelationId: {})=========================",
+						corelationId);
+				log.error("Unable to handle error message having corelationId: {} Message: {} due to exception: {}",
+						corelationId, message, e);
+				log.error("=================ERROR MESSAGE DUMP END(corelationId: {})=========================",
+						corelationId);
 			}
 		}
 		if (noOfListenersHandledMessage == 0) {
-			log.error("None of the listeners handled the message");
-			log.error("=================INVALID MESSAGE DUMP START=========================");
-			log.error("Unable to handle invalid message: {} ", message);
-			log.error("=================INVALID MESSAGE DUMP END=========================");
+			log.error("None of the listeners handled the message having corelationId: {}", corelationId);
+			log.error("=================INVALID MESSAGE DUMP START(corelationId: {})=========================",
+					corelationId);
+			log.error("Unable to handle invalid message having corelationId: {}  Message: {} ", corelationId, message);
+			log.error("=================INVALID MESSAGE DUMP END(corelationId: {})=========================",
+					corelationId);
 		}
 	}
 
