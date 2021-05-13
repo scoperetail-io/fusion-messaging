@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.scoperetail.fusion</groupId>
 	<artifactId>fusion-messaging</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2</version>
 	<name>fusion-messaging</name>
 	<description>Generic Messaging implementation</description>
 
@@ -28,7 +28,7 @@
 		<developerConnection>
 			scm:git:git@github.com:scoperetail-io/fusion-messaging.git
 		</developerConnection>
-		<tag>HEAD</tag>
+		<tag>fusion-messaging-0.2</tag>
 	</scm>
 
 	<dependencies>
