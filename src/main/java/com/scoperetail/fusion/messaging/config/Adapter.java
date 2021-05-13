@@ -40,6 +40,7 @@ public class Adapter {
 	private String protocol;
 	private String queueName;
 	private String requestBodyTemplate;
+	private String templateCustomizer;
 	private String requestHeaderTemplate;
 	private TransportType trasnportType;
 
