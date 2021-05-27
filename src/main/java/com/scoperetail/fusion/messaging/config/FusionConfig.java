@@ -15,4 +15,9 @@ public class FusionConfig {
   private final List<RetryPolicy> retryPolicies = new ArrayList<>();
   private final List<UseCaseConfig> usecases = new ArrayList<>();
   private Credentials credentials;
+  private TemplateEngine templateEngine;
+
+  public enum TemplateEngine {
+    FTL, VELOCITY
+  }
 }
