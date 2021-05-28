@@ -22,9 +22,9 @@ public class Adapter {
 		JMS, REST
 	}
 
-	public enum TransformationType {
-		DOMAIN_EVENT_TRANSFORMER, TEMPLATE_TRANSFORMER, NONE
-	}
+  public enum TransformationType {
+    DOMAIN_EVENT_FTL_TRANSFORMER, DOMAIN_EVENT_VELOCITY_TRANSFORMER, FTL_TEMPLATE_TRANSFORMER, VELOCITY_TEMPLATE_TRANSFORMER, NONE
+  }
 
 	public TransformationType transformationType;
 	private AdapterType adapterType;
