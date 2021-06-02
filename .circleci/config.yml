@@ -28,7 +28,7 @@ commands:
     steps:
       - run:
           name: Package
-          command: mvn -B -DskipTests clean package
+          command: mvn -DskipTests clean package
   mvn_test:
     description: "Maven Test"
     steps:
