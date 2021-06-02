@@ -78,11 +78,9 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - build-and-test-java8:
-          context: OSSRH
       - build-and-test-java11:
           context: OSSRH
-      - build-and-release-java8:
+      - build-and-release-java11:
           context: OSSRH
           filters:
             branches:
