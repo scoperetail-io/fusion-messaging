@@ -52,22 +52,11 @@ commands:
           command: mvn sonar:sonar
 
 executors:
-  java8_executor:
-    docker:
-      - image: cimg/openjdk:8.0
   java11_executor:
     docker:
       - image: cimg/openjdk:11.0
 
 jobs:
-  build-and-test-java8:
-    executor: java8_executor
-    steps:
-      - checkout
-      - restore_cache_cmd
-      - mvn_package
-      - mvn_test
-      - save_cache_cmd
   build-and-test-java11:
     executor: java11_executor
     steps:
@@ -77,14 +66,15 @@ jobs:
       - mvn_test
       - mvn_sonar
       - save_cache_cmd
-  build-and-release-java8:
-    executor: java8_executor
+  build-and-release-java11:
+    executor: java11_executor
     steps:
       - checkout
       - import_gpg_key
       - restore_cache_cmd
       - mvn_release
       - save_cache_cmd
+
 workflows:
   build-and-test:
     jobs:
