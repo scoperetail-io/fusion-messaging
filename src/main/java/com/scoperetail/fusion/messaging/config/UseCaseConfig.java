@@ -31,4 +31,10 @@ public class UseCaseConfig {
   private final List<Config> configs = new ArrayList<>();
   private String name;
   private String version;
+  private HashKeyTemplate hashKeyTemplate;
+  private Boolean dedupeCheck;
+
+  public enum HashKeyTemplate {
+    DOMAIN_EVENT_FTL_TRANSFORMER, DOMAIN_EVENT_VELOCITY_TRANSFORMER
+  }
 }
