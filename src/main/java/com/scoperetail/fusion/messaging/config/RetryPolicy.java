@@ -29,8 +29,10 @@ public class RetryPolicy {
   private Short maxAttempt;
   private Integer backoffMS;
   private String type;
+  private String brokerId;
+  private String queueName;
 
-  enum PolicyType {
+  public enum PolicyType {
     REALTIME,
     OFFLINE,
   }
