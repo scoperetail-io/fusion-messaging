@@ -39,32 +39,40 @@ public class Adapter {
 	}
 
 	public enum TransportType {
-		JMS, REST
+		JMS, REST, MAIL
 	}
 
   public enum TransformationType {
     DOMAIN_EVENT_FTL_TRANSFORMER, DOMAIN_EVENT_VELOCITY_TRANSFORMER, FTL_TEMPLATE_TRANSFORMER, VELOCITY_TEMPLATE_TRANSFORMER, NONE
   }
 
-	public TransformationType transformationType;
-	private AdapterType adapterType;
-	private String boQuename;
-	// JMS
-	private String template;
-	private String brokerId;
-	private String errorQueName;
-	// REST
-	private String hostName;
-	private String methodType;
-	private Integer port;
-	private String protocol;
-	private String queueName;
-	private String requestBodyTemplate;
-	private String templateCustomizer;
-	private String requestHeaderTemplate;
-	private TransportType trasnportType;
-
-	private String uriTemplate;
-
-	private UsecaseResult usecaseResult;
+  public TransformationType transformationType;
+  private AdapterType adapterType;
+  private UsecaseResult usecaseResult;
+  // JMS
+  private String boQuename;
+  private String template;
+  private String brokerId;
+  private String errorQueName;
+  // REST
+  private String hostName;
+  private String methodType;
+  private Integer port;
+  private String protocol;
+  private String queueName;
+  private String requestBodyTemplate;
+  private String templateCustomizer;
+  private String requestHeaderTemplate;
+  private TransportType trasnportType;
+  private String uriTemplate;
+  // MAIL
+  private String hostId;
+  private String fromTemplate;
+  private String replyToTemplate;
+  private String toTemplate;
+  private String ccTemplate;
+  private String bccTemplate;
+  private String sentDateTemplate;
+  private String subjectTemplate;
+  private String textTemplate;
 }
