@@ -30,7 +30,7 @@ public class RetryPolicy {
   private Integer backoffMS;
   private String type;
   private String brokerId;
-  private String queueName; 
+  private String queueName;
 
   public enum PolicyType {
     REALTIME,
