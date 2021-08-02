@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class MessageReceiver implements SessionAwareMessageListener<Message> {
-
+  private static final String JMSXDELCOUNT = "JMSXDeliveryCount";
   private final String queue;
   private final String brokerId;
   private final List<MessageListener<String>> messageListeners = new ArrayList<>(1);
@@ -51,6 +51,7 @@ public class MessageReceiver implements SessionAwareMessageListener<Message> {
     final UUID corelationId = UUID.randomUUID();
     final SimpleMessageConverter smc = new SimpleMessageConverter();
     final String strMessage = String.valueOf(smc.fromMessage(message));
+
     log.info(
         "Message received CorelationId: {} Queue: {} for BrokerId: {} Message: {}",
         corelationId,
@@ -64,6 +65,14 @@ public class MessageReceiver implements SessionAwareMessageListener<Message> {
         if (messageListener.canHandle(strMessage)) {
           noOfListenersHandledMessage++;
           taskResult = messageListener.doTask(strMessage);
+          if (DISCARD.equals(taskResult)) {
+            log.error(
+                "Sending message to validation failure handler for broker: {}, Queue: {} , Message: {} ",
+                brokerId,
+                queue,
+                strMessage);
+            messageListener.handleValidationFailure(strMessage);
+          }
           log.info("Message handling status for corelationId: {} is: {}", corelationId, taskResult);
         }
       } catch (final Throwable e) {
@@ -79,6 +88,14 @@ public class MessageReceiver implements SessionAwareMessageListener<Message> {
         log.error(
             "=================ERROR MESSAGE DUMP END(corelationId: {})=========================",
             corelationId);
+        final long reDeliveryCount = message.getLongProperty(JMSXDELCOUNT);
+
+        if (reDeliveryCount >= 3) {
+          log.error("Redelivery count exceeded for corelationId: {}", corelationId);
+          messageListener.handleFailure(strMessage);
+        } else {
+          throw new JMSException(e.getMessage());
+        }
       }
     }
     if (noOfListenersHandledMessage == 0) {

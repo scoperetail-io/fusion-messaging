@@ -1,6 +1,14 @@
 /* ScopeRetail (C)2021 */
 package com.scoperetail.fusion.messaging.adapter.out.messaging.jms.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.jms.ConnectionFactory;
+import javax.jms.Queue;
+import javax.jms.Session;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
+import org.springframework.stereotype.Service;
+
 /*-
  * *****
  * fusion-messaging
@@ -10,9 +18,9 @@ package com.scoperetail.fusion.messaging.adapter.out.messaging.jms.impl;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,14 +33,9 @@ import com.scoperetail.fusion.messaging.adapter.in.messaging.jms.MessageListener
 import com.scoperetail.fusion.messaging.adapter.in.messaging.jms.MessageReceiver;
 import com.scoperetail.fusion.messaging.adapter.in.messaging.jms.RouterHelper;
 import com.scoperetail.fusion.messaging.adapter.out.messaging.jms.MessageRouterReceiver;
-import java.util.HashMap;
-import java.util.Map;
-import javax.jms.Queue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
@@ -51,8 +54,8 @@ public class MessageRouterReceiverService implements MessageRouterReceiver {
     if (!dmlcByBrokerAndQueueMap.containsKey(endpoint)) {
       final DefaultMessageListenerContainer defaultMessageListenerContainer =
           new DefaultMessageListenerContainer();
-      defaultMessageListenerContainer.setConnectionFactory(
-          routerHelper.getConnectionFactory(brokerId));
+      final ConnectionFactory connectionFactory = routerHelper.getConnectionFactory(brokerId);
+      defaultMessageListenerContainer.setConnectionFactory(connectionFactory);
       final MessageReceiver messageReceiver =
           new MessageReceiver(queueName, brokerId, messageListener);
       defaultMessageListenerContainer.setMessageListener(messageReceiver);
@@ -61,7 +64,8 @@ public class MessageRouterReceiverService implements MessageRouterReceiver {
       defaultMessageListenerContainer.setCacheLevelName("CACHE_CONSUMER");
       defaultMessageListenerContainer.setConcurrency("5-10");
       defaultMessageListenerContainer.setAutoStartup(true);
-      defaultMessageListenerContainer.setSessionTransacted(false);
+      defaultMessageListenerContainer.setSessionTransacted(true);
+      defaultMessageListenerContainer.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
       defaultMessageListenerContainer.afterPropertiesSet();
       defaultMessageListenerContainer.start();
       dmlcByBrokerAndQueueMap.put(endpoint, messageReceiver);

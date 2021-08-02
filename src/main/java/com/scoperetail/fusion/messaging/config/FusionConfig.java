@@ -10,9 +10,9 @@ package com.scoperetail.fusion.messaging.config;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,16 +23,16 @@ package com.scoperetail.fusion.messaging.config;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import lombok.Data;
 
 @Component
 @ConfigurationProperties(prefix = "fusion")
 @Data
 public class FusionConfig {
   private final List<Broker> brokers = new ArrayList<>();
-  private final List<RetryPolicy> retryPolicies = new ArrayList<>();
+  private RestRetryPolicy restRetryPolicy;
   private final List<UseCaseConfig> usecases = new ArrayList<>();
   private Credentials credentials;
 }
