@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import com.scoperetail.fusion.messaging.config.Adapter.AdapterType;
 import lombok.Data;
 
 @Component
@@ -45,6 +46,7 @@ public class FusionConfig {
   private Map<String, Broker> brokersByBrokerIdMap = new HashMap<>(1);
   private Map<String, UseCaseConfig> usecasesByNameMap = new HashMap<>(1);
   private Map<String, Optional<Config>> activeConfigByNameMap = new HashMap<>(1);
+  private Map<String, Optional<Adapter>> inboundAdapterByNameMap = new HashMap<>(1);
 
   @PostConstruct
   public void init() {
@@ -64,6 +66,27 @@ public class FusionConfig {
                             .stream()
                             .filter(config -> config.getName().equals(usecase.getActiveConfig()))
                             .findFirst()));
+    inboundAdapterByNameMap =
+        activeConfigByNameMap
+            .entrySet()
+            .stream()
+            .collect(
+                Collectors.toMap(
+                    Map.Entry::getKey,
+                    entry ->
+                        entry
+                            .getValue()
+                            .flatMap(
+                                config ->
+                                    config
+                                        .getAdapters()
+                                        .stream()
+                                        .filter(
+                                            adapter ->
+                                                adapter
+                                                    .getAdapterType()
+                                                    .equals(AdapterType.INBOUND))
+                                        .findFirst())));
   }
 
   public Optional<Broker> getBroker(final String brokerId) {
@@ -76,5 +99,9 @@ public class FusionConfig {
 
   public Optional<Config> getActiveConfig(final String usecaseName) {
     return activeConfigByNameMap.get(usecaseName);
+  }
+
+  public Optional<Adapter> getInboundAdapter(final String usecaseName) {
+    return inboundAdapterByNameMap.get(usecaseName);
   }
 }

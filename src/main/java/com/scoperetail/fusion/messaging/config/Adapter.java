@@ -22,6 +22,8 @@ package com.scoperetail.fusion.messaging.config;
  */
 
 import static com.scoperetail.fusion.messaging.config.Adapter.TransformationType.NONE;
+import java.util.ArrayList;
+import java.util.List;
 import com.scoperetail.fusion.messaging.application.port.in.UsecaseResult;
 import lombok.Data;
 
@@ -40,6 +42,11 @@ public class Adapter {
   public enum TransportType {
     JMS,
     REST
+  }
+
+  public enum MessageType {
+    XML,
+    JSON,
   }
 
   public enum TransformationType {
@@ -70,6 +77,10 @@ public class Adapter {
   //BO
   private String boBrokerId;
   private String boQueueName;
+
+  //Inbound
+  private MessageType messageType;
+  private final List<String> messageIdentifiers = new ArrayList<>(1);
 
   private String uriTemplate;
 
