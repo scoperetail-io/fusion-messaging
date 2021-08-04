@@ -22,7 +22,13 @@ package com.scoperetail.fusion.messaging.config;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
@@ -35,4 +41,40 @@ public class FusionConfig {
   private RestRetryPolicy restRetryPolicy;
   private final List<UseCaseConfig> usecases = new ArrayList<>();
   private Credentials credentials;
+
+  private Map<String, Broker> brokersByBrokerIdMap = new HashMap<>(1);
+  private Map<String, UseCaseConfig> usecasesByNameMap = new HashMap<>(1);
+  private Map<String, Optional<Config>> activeConfigByNameMap = new HashMap<>(1);
+
+  @PostConstruct
+  public void init() {
+    brokersByBrokerIdMap =
+        brokers.stream().collect(Collectors.toMap(Broker::getBrokerId, Function.identity()));
+    usecasesByNameMap =
+        usecases.stream().collect(Collectors.toMap(UseCaseConfig::getName, Function.identity()));
+    activeConfigByNameMap =
+        usecases
+            .stream()
+            .collect(
+                Collectors.toMap(
+                    UseCaseConfig::getName,
+                    usecase ->
+                        usecase
+                            .getConfigs()
+                            .stream()
+                            .filter(config -> config.getName().equals(usecase.getActiveConfig()))
+                            .findFirst()));
+  }
+
+  public Optional<Broker> getBroker(final String brokerId) {
+    return Optional.ofNullable(brokersByBrokerIdMap.get(brokerId));
+  }
+
+  public Optional<UseCaseConfig> getUsecase(final String usecaseName) {
+    return Optional.ofNullable(usecasesByNameMap.get(usecaseName));
+  }
+
+  public Optional<Config> getActiveConfig(final String usecaseName) {
+    return activeConfigByNameMap.get(usecaseName);
+  }
 }
