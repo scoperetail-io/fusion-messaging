@@ -35,21 +35,23 @@ public class Adapter {
 	}
 
 	public enum AdapterType {
-		INBOUND, OUTBOUND
+		INBOUND, OUTBOUND,
 	}
 
 	public enum TransportType {
-		JMS, REST
+		JMS, REST, MAIL, KAFKA,
 	}
 
-  public enum TransformationType {
-    DOMAIN_EVENT_FTL_TRANSFORMER, DOMAIN_EVENT_VELOCITY_TRANSFORMER, FTL_TEMPLATE_TRANSFORMER, VELOCITY_TEMPLATE_TRANSFORMER, NONE
-  }
+	public enum TransformationType {
+		DOMAIN_EVENT_FTL_TRANSFORMER, DOMAIN_EVENT_VELOCITY_TRANSFORMER, FTL_TEMPLATE_TRANSFORMER,
+		VELOCITY_TEMPLATE_TRANSFORMER, NONE
+	}
 
 	public TransformationType transformationType;
 	private AdapterType adapterType;
-	private String boQuename;
+	private UsecaseResult usecaseResult;
 	// JMS
+	private String boQuename;
 	private String template;
 	private String brokerId;
 	private String errorQueName;
@@ -63,8 +65,17 @@ public class Adapter {
 	private String templateCustomizer;
 	private String requestHeaderTemplate;
 	private TransportType trasnportType;
-
 	private String uriTemplate;
-
-	private UsecaseResult usecaseResult;
+	// MAIL
+	private String hostId;
+	private String fromTemplate;
+	private String replyToTemplate;
+	private String toTemplate;
+	private String ccTemplate;
+	private String bccTemplate;
+	private String sentDateTemplate;
+	private String subjectTemplate;
+	private String textTemplate;
+	// KAFKA
+	private String topicName;
 }

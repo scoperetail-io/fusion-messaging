@@ -35,4 +35,5 @@ public class FusionConfig {
   private final List<RetryPolicy> retryPolicies = new ArrayList<>();
   private final List<UseCaseConfig> usecases = new ArrayList<>();
   private Credentials credentials;
+  private final List<MailHost> mailHosts = new ArrayList<>();
 }
