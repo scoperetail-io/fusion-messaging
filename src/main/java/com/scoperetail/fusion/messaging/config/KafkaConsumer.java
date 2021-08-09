@@ -1,4 +1,3 @@
-/* ScopeRetail (C)2021 */
 package com.scoperetail.fusion.messaging.config;
 
 /*-
@@ -21,20 +20,6 @@ package com.scoperetail.fusion.messaging.config;
  * =====
  */
 
-import com.scoperetail.fusion.messaging.adapter.JmsProvider;
+public class KafkaConsumer {
 
-import lombok.Data;
-
-@Data
-public class Broker {
-	private String channel;
-	private String hostUrl;
-	private String brokerId;
-	private JmsProvider jmsProvider;
-	private String queueManagerName;
-	private Integer sendSessionCacheSize;
-	private String userName;
-	private KafkaProducer kafkaProducer;
-	private KafkaConsumer kafkaConsumer;
-	private KafkaSecurityConfig kafkaSecurityConfig;
 }
