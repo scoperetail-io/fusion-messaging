@@ -3,7 +3,6 @@ package com.scoperetail.fusion.messaging.adapter.out.messaging.jms.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.jms.ConnectionFactory;
 import javax.jms.Queue;
 import javax.jms.Session;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
@@ -54,8 +53,8 @@ public class MessageRouterReceiverService implements MessageRouterReceiver {
     if (!dmlcByBrokerAndQueueMap.containsKey(endpoint)) {
       final DefaultMessageListenerContainer defaultMessageListenerContainer =
           new DefaultMessageListenerContainer();
-      final ConnectionFactory connectionFactory = routerHelper.getConnectionFactory(brokerId);
-      defaultMessageListenerContainer.setConnectionFactory(connectionFactory);
+      defaultMessageListenerContainer.setConnectionFactory(
+          routerHelper.getConnectionFactory(brokerId));
       final MessageReceiver messageReceiver =
           new MessageReceiver(queueName, brokerId, messageListener);
       defaultMessageListenerContainer.setMessageListener(messageReceiver);
