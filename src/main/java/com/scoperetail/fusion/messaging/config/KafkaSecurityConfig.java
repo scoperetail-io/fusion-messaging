@@ -1,5 +1,4 @@
-/* ScopeRetail (C)2021 */
-package com.scoperetail.fusion.messaging.adapter;
+package com.scoperetail.fusion.messaging.config;
 
 /*-
  * *****
@@ -21,6 +20,14 @@ package com.scoperetail.fusion.messaging.adapter;
  * =====
  */
 
-public enum JmsProvider {
-	ACTIVEMQ, APACHEKAFKA,
+import lombok.Data;
+
+@Data
+public class KafkaSecurityConfig {
+	private String securityProtocol;
+	private String saslJaasConfig;
+	private String sslTruststoreLocation;
+	private String sslTruststorePassword;
+	private String listenerAckMode;
+	private String saslMechanism;
 }

@@ -1,5 +1,4 @@
-/* ScopeRetail (C)2021 */
-package com.scoperetail.fusion.messaging.adapter;
+package com.scoperetail.fusion.messaging.config;
 
 /*-
  * *****
@@ -21,6 +20,12 @@ package com.scoperetail.fusion.messaging.adapter;
  * =====
  */
 
-public enum JmsProvider {
-	ACTIVEMQ, APACHEKAFKA,
+import lombok.Data;
+
+@Data
+public class KafkaProducer {
+	private String keySerializerClass;
+	private String valueSerializerClass;
+	private String retryBackoffMs;
+	private String retries;
 }

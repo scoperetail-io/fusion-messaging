@@ -42,6 +42,7 @@ public class FusionConfig {
   private RestRetryPolicy restRetryPolicy;
   private final List<UseCaseConfig> usecases = new ArrayList<>();
   private Credentials credentials;
+  private final List<MailHost> mailHosts = new ArrayList<>();
 
   private Map<String, Broker> brokersByBrokerIdMap = new HashMap<>(1);
   private Map<String, UseCaseConfig> usecasesByNameMap = new HashMap<>(1);

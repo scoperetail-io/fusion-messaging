@@ -26,12 +26,18 @@ import lombok.Data;
 
 @Data
 public class Broker {
-  private String channel;
+  //COMMON
   private String hostUrl;
   private String brokerId;
   private JmsProvider jmsProvider;
+  private String userName;
+  //JMS
+  private String channel;
   private String queueManagerName;
   private Integer sendSessionCacheSize;
-  private String userName;
   private final AmqpRedeliveryPolicy amqpRedeliveryPolicy = new AmqpRedeliveryPolicy();
+  //KAFKA
+  private KafkaProducer kafkaProducer;
+  private KafkaConsumer kafkaConsumer;
+  private KafkaSecurityConfig kafkaSecurityConfig;
 }

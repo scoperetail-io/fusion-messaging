@@ -1,5 +1,4 @@
-/* ScopeRetail (C)2021 */
-package com.scoperetail.fusion.messaging.adapter;
+package com.scoperetail.fusion.messaging.config;
 
 /*-
  * *****
@@ -21,6 +20,16 @@ package com.scoperetail.fusion.messaging.adapter;
  * =====
  */
 
-public enum JmsProvider {
-	ACTIVEMQ, APACHEKAFKA,
+import lombok.Data;
+
+@Data
+public class MailHost {
+  private String hostId;
+  private String hostUrl;
+  private Integer port;
+  private String username;
+  private String password;
+  private String transportProtocol;
+  private boolean debugEnabled;
+  private Smtp smtp;
 }

@@ -41,7 +41,9 @@ public class Adapter {
 
   public enum TransportType {
     JMS,
-    REST
+    REST,
+    MAIL,
+    KAFKA,
   }
 
   public enum MessageType {
@@ -57,12 +59,19 @@ public class Adapter {
     NONE
   }
 
+  //COMMON
   public TransformationType transformationType;
   private AdapterType adapterType;
-  // JMS
+  private TransportType trasnportType;
+  private UsecaseResult usecaseResult;
+  // JMS & KAFKA
   private String template;
   private String brokerId;
   private String errorQueName;
+  private String topicName;
+  //BO
+  private String boBrokerId;
+  private String boQueueName;
   // REST
   private String hostName;
   private String methodType;
@@ -72,17 +81,18 @@ public class Adapter {
   private String requestBodyTemplate;
   private String templateCustomizer;
   private String requestHeaderTemplate;
-  private TransportType trasnportType;
-
-  //BO
-  private String boBrokerId;
-  private String boQueueName;
-
+  private String uriTemplate;
+  // MAIL
+  private String hostId;
+  private String fromTemplate;
+  private String replyToTemplate;
+  private String toTemplate;
+  private String ccTemplate;
+  private String bccTemplate;
+  private String sentDateTemplate;
+  private String subjectTemplate;
+  private String textTemplate;
   //Inbound
   private MessageType messageType;
   private final List<String> messageIdentifiers = new ArrayList<>(1);
-
-  private String uriTemplate;
-
-  private UsecaseResult usecaseResult;
 }
