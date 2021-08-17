@@ -1,4 +1,4 @@
-package com.scoperetail.fusion.messaging.config.jms;
+package com.scoperetail.fusion.messaging;
 
 /*-
  * *****
@@ -22,10 +22,10 @@ package com.scoperetail.fusion.messaging.config.jms;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableAutoConfiguration(exclude = { JmsAutoConfiguration.class })
-public class JmsConfig {
-
-}
+@EnableAutoConfiguration(exclude = {JmsAutoConfiguration.class})
+@ComponentScan
+public class JmsConfig {}
