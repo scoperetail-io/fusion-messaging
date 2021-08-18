@@ -1,5 +1,4 @@
-/* ScopeRetail (C)2021 */
-package com.scoperetail.fusion.messaging.adapter;
+package com.scoperetail.fusion.messaging;
 
 /*-
  * *****
@@ -21,6 +20,12 @@ package com.scoperetail.fusion.messaging.adapter;
  * =====
  */
 
-public enum JmsProvider {
-	ACTIVEMQ, APACHEKAFKA,
-}
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableAutoConfiguration(exclude = {JmsAutoConfiguration.class})
+@ComponentScan
+public class JmsConfig {}
