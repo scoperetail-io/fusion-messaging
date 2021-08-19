@@ -7,29 +7,39 @@ package com.scoperetail.fusion.messaging.adapter.in.messaging.jms;
  * -----
  * Copyright (C) 2018 - 2021 Scope Retail Systems Inc.
  * -----
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  * =====
  */
 
 import static com.scoperetail.fusion.messaging.adapter.in.messaging.jms.TaskResult.DISCARD;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import org.springframework.jms.listener.SessionAwareMessageListener;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
+import com.scoperetail.fusion.config.AmqpRedeliveryPolicy;
+import com.scoperetail.fusion.config.Broker;
+import com.scoperetail.fusion.config.FusionConfig;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -38,9 +48,14 @@ public class MessageReceiver implements SessionAwareMessageListener<Message> {
   private final String queue;
   private final String brokerId;
   private final List<MessageListener<String>> messageListeners = new ArrayList<>(1);
+  private final FusionConfig fusionConfig;
 
   public MessageReceiver(
-      final String queue, final String brokerId, final MessageListener<String> messageListener) {
+      final FusionConfig fusionConfig,
+      final String queue,
+      final String brokerId,
+      final MessageListener<String> messageListener) {
+    this.fusionConfig = fusionConfig;
     this.queue = queue;
     this.brokerId = brokerId;
     registerListener(messageListener);
@@ -89,12 +104,17 @@ public class MessageReceiver implements SessionAwareMessageListener<Message> {
             "=================ERROR MESSAGE DUMP END(corelationId: {})=========================",
             corelationId);
         final long reDeliveryCount = message.getLongProperty(JMSXDELCOUNT);
-
-        if (reDeliveryCount >= 3) {
-          log.error("Redelivery count exceeded for corelationId: {}", corelationId);
-          messageListener.handleFailure(strMessage);
-        } else {
-          throw new JMSException(e.getMessage());
+        final Optional<Broker> optionalBroker = fusionConfig.getBroker(brokerId);
+        if (optionalBroker.isPresent()) {
+          final Broker broker = optionalBroker.get();
+          final AmqpRedeliveryPolicy amqpRedeliveryPolicy = broker.getAmqpRedeliveryPolicy();
+          final Integer maxDeliveries = amqpRedeliveryPolicy.getMaxDeliveries();
+          if (maxDeliveries != -1 && reDeliveryCount >= maxDeliveries) {
+            log.error("Redelivery count exceeded for corelationId: {}", corelationId);
+            messageListener.handleFailure(strMessage);
+          } else {
+            throw new JMSException(e.getMessage());
+          }
         }
       }
     }
