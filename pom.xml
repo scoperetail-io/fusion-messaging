@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.scoperetail.fusion</groupId>
 	<artifactId>fusion-messaging</artifactId>
-	<version>0.13</version>
+	<version>0.14-SNAPSHOT</version>
 	<name>${project.artifactId}</name>
 	<description>Generic Messaging implementation</description>
 	<url>https://github.com/scoperetail-io/${project.artifactId}</url>
@@ -26,7 +26,7 @@
 		<developerConnection>
             scm:git:git@github.com:scoperetail-io/${project.artifactId}.git
         </developerConnection>
-		<tag>fusion-messaging-0.13</tag>
+		<tag>HEAD</tag>
 		<url>https://github.com/scoperetail-io/${project.artifactId}</url>
 	</scm>
 
