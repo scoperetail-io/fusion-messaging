@@ -78,6 +78,7 @@ public class MessageReceiver implements SessionAwareMessageListener<Message> {
       TaskResult taskResult = DISCARD;
       try {
         if (messageListener.canHandle(strMessage)) {
+          messageListener.auditMessage(strMessage);
           noOfListenersHandledMessage++;
           taskResult = messageListener.doTask(strMessage);
           if (DISCARD.equals(taskResult)) {

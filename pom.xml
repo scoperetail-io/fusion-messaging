@@ -17,7 +17,7 @@
 	<properties>
 		<javax-jms.version>2.0.1</javax-jms.version>
 		<spring.version>2.4.5</spring.version>
-		<fusion-config.version>0.3</fusion-config.version>
+		<fusion-config.version>0.4</fusion-config.version>
 		<spring-jms.version>5.3.6</spring-jms.version>
 		<javax-annotation-api.version>1.3.2</javax-annotation-api.version>
 	</properties>
