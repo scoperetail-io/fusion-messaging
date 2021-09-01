@@ -31,8 +31,6 @@ public interface MessageListener<T> {
 
   boolean canHandle(final T message);
 
-  void auditMessage(String message);
-
   TaskResult doTask(final T message) throws Exception;
 
   void handleValidationFailure(T strMessage) throws Exception;
